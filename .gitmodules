@@ -1,0 +1,6 @@
+[submodule "mesos-in-action-code-samples"]
+	path = mesos-in-action-code-samples
+	url = https://github.com/rji/mesos-in-action-code-samples
+[submodule "dcos-vagrant"]
+	path = dcos-vagrant
+	url = https://github.com/dcos/dcos-vagrant
