@@ -15,10 +15,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "debian/jessie64"
 
+  # Set ressources
   config.vm.provider "virtualbox" do |v|
     v.memory = 1024
     v.cpus = 2
   end
+
+  config.vm.network "private_network", ip: "192.168.2.10"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -96,7 +99,7 @@ Vagrant.configure("2") do |config|
 
     # Install Mesos and frameworks
     apt-get -y install mesos marathon chronos
-    apt-get install zookeeper -t jessie-backports
+    apt-get -y install zookeeper -t jessie-backports
 
     # Install Docker
     curl -fsSL get.docker.com | sh

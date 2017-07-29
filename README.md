@@ -14,3 +14,7 @@ On Ubuntu:
     
     $ vagrant up
     $ vagrant ssh
+    
+Pour vérifier si le réseau fonctionne: 
+
+    $ ping 192.168.2.10    
