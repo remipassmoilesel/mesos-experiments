@@ -31,6 +31,5 @@ Lancer une machine virtuelle:
 
 Voir dépôt, doc claire.
 
-## Créer un vagrant
 
 

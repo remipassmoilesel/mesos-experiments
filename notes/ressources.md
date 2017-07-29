@@ -1,5 +1,13 @@
 # Ressources
 
+## Fichiers
+
+Configuration:
+
+    $ vim /usr/bin/mesos-init-wrapper 
+
+## Documentation
+
 Mesos in Action - Roger Ignazio
 
 https://www.digitalocean.com/community/tutorials/an-introduction-to-mesosphere

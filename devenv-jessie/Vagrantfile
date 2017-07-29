@@ -18,10 +18,13 @@ Vagrant.configure("2") do |config|
   # Set ressources
   config.vm.provider "virtualbox" do |v|
     v.memory = 1024
-    v.cpus = 2
+    v.cpus = 1
   end
 
-  config.vm.network "private_network", ip: "192.168.2.10"
+  config.vm.network "public_network"
+  config.vm.network "forwarded_port", guest: 5050, host: 5050
+
+  #config.vm.network "private_network", ip: "192.168.2.10"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -40,7 +43,6 @@ Vagrant.configure("2") do |config|
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
   # your network.
-  # config.vm.network "public_network"
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -75,6 +77,9 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
 
+    # Activate debug
+    set -x
+
     export DEBIANFRONTEND=noninteractive
 
     # Add the repository and update index
@@ -85,21 +90,29 @@ Vagrant.configure("2") do |config|
     # Add repos
     echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee -a /etc/apt/sources.list
     echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
-    apt-get -y update
-    apt-get -y upgrade
+    apt-get update -y
+    apt-get upgrade -y
 
     # Install java 8
-    apt-get install openjdk-8-jre -t jessie-backports
+    apt-get install -y openjdk-8-jre -t jessie-backports
 
     # Fix locale
     echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\n' > /etc/default/locale
 
     # Add various helpers
-    apt-get -y install vim byobu curl wget openssh-server
+    apt-get install -y vim byobu curl wget openssh-server ranger zsh git
+
+    # change root password
+    echo root:vagrant | chpasswd
+
+    # Add oh my zsh for root
+    cd /root && git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
+    cp /vagrant/zshrc /root/.zshrc
+    chsh -s /bin/zsh
 
     # Install Mesos and frameworks
-    apt-get -y install mesos marathon chronos
-    apt-get -y install zookeeper -t jessie-backports
+    apt-get install -y mesos marathon chronos
+    apt-get install -y zookeeper zookeeperd -t jessie-backports
 
     # Install Docker
     curl -fsSL get.docker.com | sh
