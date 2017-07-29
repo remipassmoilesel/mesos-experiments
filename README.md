@@ -11,6 +11,7 @@ On Ubuntu:
 
     $ sudo apt install virtualbox vagrant
     $ vagrant plugin install vagrant-hostmanager 
+    $ vagrant plugin install vagrant-vbguest
     
     $ vagrant up
     $ vagrant ssh

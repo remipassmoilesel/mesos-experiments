@@ -6,14 +6,15 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://atlas.hashicorp.com/search.
+  # check if all plugins are present
+  validate_plugins || exit(1)
 
+  # box template
   config.vm.box = "debian/jessie64"
+
+  # check version of guest additions, disable if there are issues
+  config.vbguest.auto_update = true
 
   # Set ressources
   config.vm.provider "virtualbox" do |v|
@@ -22,13 +23,6 @@ Vagrant.configure("2") do |config|
   end
 
   # Configure network
-  config.vm.network "public_network"
-  config.vm.network "forwarded_port", guest: 22, host: 10022
-  config.vm.network "forwarded_port", guest: 5050, host: 5050
-  config.vm.network "forwarded_port", guest: 5051, host: 5051
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
-  config.vm.hostname = "master-jessie.mesos"
-
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
@@ -36,6 +30,12 @@ Vagrant.configure("2") do |config|
   config.hostmanager.include_offline = true
 
   #config.vm.network "private_network", ip: "192.168.2.10"
+  config.vm.network "public_network"
+  config.vm.network "forwarded_port", guest: 22, host: 10022
+  config.vm.network "forwarded_port", guest: 5050, host: 5050
+  config.vm.network "forwarded_port", guest: 5051, host: 5051
+  config.vm.network "forwarded_port", guest: 8080, host: 8080
+  config.vm.hostname = "master-jessie.mesos"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -141,4 +141,23 @@ Vagrant.configure("2") do |config|
     chmod +x /etc/rc.local
 
   SHELL
+end
+
+
+def validate_plugins
+  required_plugins = ['vagrant-hostmanager', 'vagrant-vbguest']
+  missing_plugins = []
+
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin?(plugin)
+      missing_plugins << "The '#{plugin}' plugin is required. Install it with 'vagrant plugin install #{plugin}'"
+    end
+  end
+
+  unless missing_plugins.empty?
+    missing_plugins.each { |x| UI.error x }
+    return false
+  end
+
+  true
 end
