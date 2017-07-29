@@ -1,0 +1,8 @@
+
+# Start services
+# TODO: find a better way, System V ?
+
+service mesos-slave start
+service marathon start
+
+exit 0

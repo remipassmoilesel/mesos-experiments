@@ -27,6 +27,10 @@ Installer Mesos et les frameworks principaux:
     apt-get -y install mesos marathon chronos
     apt-get -y install zookeeper zookeeperd -t jessie-backports
 
+Ensuite une interface web est disponible ici:
+
+    http://localhost:5050/
+
 ## Installer Docker
 
 Installer Docker:
@@ -41,6 +45,11 @@ Installer Docker:
     apt-get install -y python-pip -t jessie-backports
     pip install docker-compose
 
+Configurer mesos-slave pour Docker:
+
+    $ echo "docker,mesos" | sudo tee /etc/mesos-slave/containerizers
+    $ echo "8mins" | sudo tee /etc/mesos-slave/executor_registration_timeout
+
 ## Installer Zookeeper
 
 Installer zookeeper + les scripts de démarrage:
@@ -53,4 +62,14 @@ Vérifier l'installation:
     $ echo ruok | nc 127.0.0.1 2181
     imok    
 
+## Démarrer mesos-slave et marathon
+
+    $ sudo service mesos-slave start
+    $ sudo service marathon start
+    
+Dans l'interface de mesos, un nouvel agent doit apparaitre.
+
+Une nouvelle interface web est disponible à l'adresse:
+
+    $ http://localhost:8080/
 

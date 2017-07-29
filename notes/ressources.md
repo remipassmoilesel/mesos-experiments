@@ -1,10 +1,14 @@
 # Ressources
 
-## Fichiers
+## Fichiers et installation
 
 Configuration:
 
-    $ vim /usr/bin/mesos-init-wrapper 
+    $ vim /usr/bin/mesos-init-wrapper
+    
+De l'aide sur l'api est disponible sur l'installation:
+
+    http://master-jessie.mesos:5050/help 
 
 ## Documentation
 
