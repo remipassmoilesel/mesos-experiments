@@ -1,5 +1,6 @@
 # TODO
 
+- Voir Marathon-DNS pour load balancing
 - Voir Apache Sparks
 - Créer 3 maitres et tester zookeeper
 - Utiliser HAPProxy pour load balancing et service discovery
