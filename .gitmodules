@@ -4,3 +4,6 @@
 [submodule "dcos-vagrant"]
 	path = dcos-vagrant
 	url = https://github.com/dcos/dcos-vagrant
+[submodule "docker-mesos-marathon-screencast"]
+	path = docker-mesos-marathon-screencast
+	url = https://github.com/mesosphere/docker-mesos-marathon-screencast/
