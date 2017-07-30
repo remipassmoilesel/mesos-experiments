@@ -24,6 +24,7 @@ Installation: http://www.bogotobogo.com/DevOps/DevOps_Mesos_Install.php
 
 https://github.com/Woorank/vagrant-mesos-cluster
 https://github.com/everpeace/vagrant-mesos
+https://github.com/mesosphere/docker-mesos-marathon-screencast
 
 ## Vidéos
 

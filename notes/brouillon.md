@@ -34,6 +34,9 @@ Répartiteur de charge
 
 ## Premières impression
 
-### Plus
-- abstraction du cluster pour ne former qu'une machine
+### Les plus
+- Marathon: versionnements des tâches, permet de relancer une ancienne tâche en cas d'échec.
+- Marathon: éditeur json avec verification syntaxique.
 
+### Les moins
+- en cas d'erreur avec la web ui Marathon, il faut regarder les journaux systèmes pour debugger.
