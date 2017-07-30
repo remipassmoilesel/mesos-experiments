@@ -3,3 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
+
+  h2 Environment variables
+  table(style='width: 80%; margin: auto', border=1)
+    each val, index in envVars
+      tr
+        td= index
+        td= val
