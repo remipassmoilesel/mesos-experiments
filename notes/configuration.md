@@ -40,16 +40,16 @@ Nombre de maitres nécéssaires à une élection:
     $ vim /etc/mesos-master/quorum
     
     1
-    
-                                  
-Pour calculer le quorum: 
+                                      
+Pour calculer le quorum (la valeur de la majorité nécessaire pour élire un maitre): 
 
     Nombre de serveurs: 2 × N – 1 
     Quorum: N 
     Nombre de fautes tolérés: N – 1
     
-    
-    
+## Configurer HAProxy
+
+    $ vim /etc/haproxy/haproxy.cfg
     
     
     

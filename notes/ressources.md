@@ -12,7 +12,7 @@ De l'aide sur l'api est disponible sur l'installation:
 
 ## Documentation
 
-Mesos in Action - Roger Ignazio
+Livre: Mesos in Action - Roger Ignazio
 
 https://www.digitalocean.com/community/tutorials/an-introduction-to-mesosphere
 
@@ -25,3 +25,6 @@ Installation: http://www.bogotobogo.com/DevOps/DevOps_Mesos_Install.php
 https://github.com/Woorank/vagrant-mesos-cluster
 https://github.com/everpeace/vagrant-mesos
 
+## Vidéos
+
+Présentation Mesos/Marathon/Google Cloud: https://www.youtube.com/watch?v=hZNGST2vIds
