@@ -20,16 +20,24 @@ Ajouter des dépôts et mettre à jour:
 Installer Java 8 à partir des backports 
 
     # Install java 8
-    apt-get install openjdk-8-jre -t jessie-backports
+    $ apt-get install openjdk-8-jre -t jessie-backports
 
 Installer Mesos et les frameworks principaux:
 
-    apt-get -y install mesos marathon chronos
-    apt-get -y install zookeeper zookeeperd -t jessie-backports
+    $ apt-get -y install mesos marathon chronos 
 
 Ensuite une interface web est disponible ici:
 
     http://localhost:5050/
+    
+Tester ensuite l'installation:
+
+    $ mesos ps
+    
+Si une erreur d'import apparait:
+
+    $ pip install pip --upgrade
+    $ pip install mesos.cli
 
 ## Installer Docker
 
@@ -54,7 +62,7 @@ Configurer mesos-slave pour Docker:
 
 Installer zookeeper + les scripts de démarrage:
 
-    $ sudo apt install zookeeper zookeeperd
+    $ sudo apt-get install zookeeper zookeeperd
     
 Vérifier l'installation:
     
@@ -62,7 +70,16 @@ Vérifier l'installation:
     $ echo ruok | nc 127.0.0.1 2181
     imok    
 
+## Installer HAProxy
+
+Installation:
+
+    $ sudo apt-get install haproxy haproxy-doc
+
 ## Démarrer mesos-slave et marathon
+
+Il n'existe pas de script de démarrage par défaut. Il est possible d'ajouter ces 
+commandes à /etc/rc.local:
 
     $ sudo service mesos-slave start
     $ sudo service marathon start
@@ -72,4 +89,10 @@ Dans l'interface de mesos, un nouvel agent doit apparaitre.
 Une nouvelle interface web est disponible à l'adresse:
 
     $ http://localhost:8080/
+    
+/!\ Si l'hôte a un nom, marathon éxecute des requête asynchrone vers le nom d'hôte et 
+l'interface affiche qu'elle est déconnectée. Dans ce cas ajouter au fichier 
+ /etc/hosts du client:
+ 
+     $ echo "192.168.2.10    master-jessie.mesos" > /etc/hosts    
 
