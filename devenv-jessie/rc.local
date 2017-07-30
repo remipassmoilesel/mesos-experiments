@@ -1,8 +1,11 @@
+#!/usr/bin/env bash
 
 # Start services
 # TODO: find a better way, System V ?
 
 service mesos-slave start
 service marathon start
+service chronos start
+service haproxy start
 
 exit 0

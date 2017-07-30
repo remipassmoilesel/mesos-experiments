@@ -108,8 +108,9 @@ Vagrant.configure("2") do |config|
     apt-get install -y openjdk-8-jre -t jessie-backports
 
     # Fix locale for french
-    echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\n' > /etc/default/locale
-    locale-gen fr_FR.UTF-8
+    echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\nLC_TYPE="fr_FR.UTF-8"\n' > /etc/default/locale
+    echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
+    dpkg-reconfigure -f noninteractive locales
 
     # Add various helpers
     apt-get install -y vim byobu curl wget openssh-server ranger zsh git
@@ -124,7 +125,8 @@ Vagrant.configure("2") do |config|
 
     # Install Mesos and frameworks
     apt-get install -y mesos marathon chronos
-    apt-get install -y zookeeper zookeeperd -t jessie-backports
+    apt-get install -y zookeeper zookeeperd
+    apt-get install -y haproxy haproxy-doc
 
     # Install Docker
     curl -fsSL get.docker.com | sh
@@ -132,9 +134,13 @@ Vagrant.configure("2") do |config|
     # Add docker group to vagrant user
     usermod -aG docker vagrant
 
-    # Install docker compose
+    # install python pip and update it
     apt-get install -y python-pip -t jessie-backports
+    pip install pip --upgrade
+
+    # install mesos cli and docker compose
     pip install docker-compose
+    pip install mesos.cli
 
     # Add startup script
     cp /vagrant/rc.local /etc/rc.local
