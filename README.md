@@ -14,8 +14,13 @@ Sur Ubuntu:
     $ vagrant plugin install vagrant-vbguest
     
     $ vagrant up
+    
+Pour se connecter aux machines localement:    
+    
     $ vagrant ssh master
     $ vagrant ssh slave
+    
+    >> Des outils ont été ajoutés pour l'utilisateur root:azerty.    
     
 Pour vérifier si le réseau fonctionne: 
 
