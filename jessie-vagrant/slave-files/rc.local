@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# Start services
+# TODO: find a better way, System V ?
+
+service mesos-slave start
+
+exit 0

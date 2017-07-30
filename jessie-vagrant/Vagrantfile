@@ -1,0 +1,255 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Master address and host name
+masterAddress       = "192.168.0.40"
+masterHostName      = "master-jessie.mesos"
+
+# Enable a slave node
+enableSlaveNode     = true
+
+# Slave address and host name
+slaveAddress        = "192.168.0.41"
+slaveHostName       = "slave-jessie.mesos"
+
+Vagrant.configure("2") do |config|
+
+  # check if all plugins are present
+  validate_plugins || exit(1)
+
+  ##
+  ## Setup master
+  ##
+
+  config.vm.define "master" do |master|
+
+    # box template
+    master.vm.box = "debian/jessie64"
+
+    # check version of guest additions, disable if there are issues
+    master.vbguest.auto_update = true
+
+    # Set ressources
+    master.vm.provider "virtualbox" do |v|
+      v.memory = 4096
+      v.cpus = 2
+    end
+
+    # Configure network
+    master.hostmanager.enabled = true
+    master.hostmanager.manage_host = true
+    master.hostmanager.manage_guest = true
+    master.hostmanager.ignore_private_ip = false
+    master.hostmanager.include_offline = true
+
+    master.vm.network "public_network", ip: masterAddress
+    master.vm.network "forwarded_port", guest: 22, host: 10022
+    master.vm.network "forwarded_port", guest: 5050, host: 5050
+    master.vm.network "forwarded_port", guest: 5051, host: 5051
+    master.vm.network "forwarded_port", guest: 8080, host: 8080
+    master.vm.hostname = masterHostName
+
+    master.vm.provision "shell", inline: <<-SHELL
+
+      # Activate debug
+      set -x
+
+      echo "Setting up master with adress:             #{masterAddress}"
+      echo "Setting up master with host name:          #{masterHostName}"
+
+      export DEBIANFRONTEND=noninteractive
+
+      # Add the repository and update index
+      apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
+      export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+      export CODENAME=$(lsb_release -cs)
+
+      # Add repos
+      echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+      echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
+      apt-get update -y
+      apt-get upgrade -y
+
+      # Install java 8
+      apt-get install -y openjdk-8-jre -t jessie-backports
+
+      # Fix locale for french
+      echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\nLC_TYPE="fr_FR.UTF-8"\n' > /etc/default/locale
+      echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
+      dpkg-reconfigure -f noninteractive locales
+
+      # Add various helpers
+      apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed htop
+
+      # change root password
+      echo root:azerty | chpasswd
+
+      # Add oh my zsh for root
+      cd /root && git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
+      cp /vagrant/common-files/zshrc /root/.zshrc
+      chsh -s /bin/zsh
+
+      # Install Mesos and frameworks
+      apt-get install -y mesos marathon chronos
+      apt-get install -y zookeeper zookeeperd
+      apt-get install -y haproxy haproxy-doc
+
+      # Install Docker
+      curl -fsSL get.docker.com | sh
+
+      # Add docker group to vagrant user
+      usermod -aG docker vagrant
+
+      # install python pip and update it
+      apt-get install -y python-pip -t jessie-backports
+      pip install pip --upgrade
+
+      # install mesos cli and docker compose
+      pip install docker-compose
+      pip install mesos.cli
+
+      # Add startup script
+      cp /vagrant/master-files/rc.local /etc/rc.local
+      chmod +x /etc/rc.local
+
+      # Enable haproxy / marathon bridge for load balancing
+      /vagrant/common-files/haproxy-marathon-bridge install_haproxy_system localhost:8080
+
+      # Add entry to host for slave
+      echo -e "#{slaveAddress} #{slaveHostName}\n" >> /etc/hosts
+
+    SHELL
+  end
+
+  ##
+  ## Setup slave
+  ##
+
+  if enableSlaveNode == true
+    config.vm.define "slave" do |slave|
+
+      # box template
+      slave.vm.box = "debian/jessie64"
+
+      # check version of guest additions, disable if there are issues
+      slave.vbguest.auto_update = true
+
+      # Set ressources
+      slave.vm.provider "virtualbox" do |v|
+        v.memory = 2048
+        v.cpus = 1
+      end
+
+      # Configure network
+      slave.hostmanager.enabled = true
+      slave.hostmanager.manage_host = true
+      slave.hostmanager.manage_guest = true
+      slave.hostmanager.ignore_private_ip = false
+      slave.hostmanager.include_offline = true
+
+      slave.vm.network "public_network", ip: slaveAddress
+      slave.vm.network "forwarded_port", guest: 22, host: 10023
+      slave.vm.network "forwarded_port", guest: 5050, host: 5060
+      slave.vm.network "forwarded_port", guest: 5051, host: 5061
+      slave.vm.hostname = slaveHostName
+
+      slave.vm.provision "shell", inline: <<-SHELL
+
+        # Activate debug
+        set -x
+
+        echo "Setting up slave with adress:             #{slaveAddress}"
+        echo "Setting up slave with host name:          #{slaveHostName}"
+        echo "Setting up slave with master addess:      #{masterAddress}"
+
+        export DEBIANFRONTEND=noninteractive
+
+        # Add the repository and update index
+        apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
+        export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+        export CODENAME=$(lsb_release -cs)
+
+        # Add repos
+        echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+        echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
+        apt-get update -y
+        apt-get upgrade -y
+
+        # Install java 8
+        apt-get install -y openjdk-8-jre -t jessie-backports
+
+        # Fix locale for french
+        echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\nLC_TYPE="fr_FR.UTF-8"\n' > /etc/default/locale
+        echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
+        dpkg-reconfigure -f noninteractive locales
+
+        # Add various helpers
+        apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed htop
+
+        # change root password
+        echo root:azerty | chpasswd
+
+        # Add oh my zsh for root
+        cd /root && git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
+        cp /vagrant/common-files/zshrc /root/.zshrc
+        chsh -s /bin/zsh
+
+        # Install Mesos and frameworks
+        apt-get install -y mesos haproxy
+
+        # Install Docker
+        curl -fsSL get.docker.com | sh
+
+        # Add docker group to vagrant user
+        usermod -aG docker vagrant
+
+        # install python pip and update it
+        apt-get install -y python-pip -t jessie-backports
+        pip install pip --upgrade
+
+        # install mesos cli and docker compose
+        pip install docker-compose
+        pip install mesos.cli
+
+        # Add startup script
+        cp /vagrant/slave-files/rc.local /etc/rc.local
+        chmod +x /etc/rc.local
+
+        # Enable haproxy / marathon bridge for load balancing
+        /vagrant/common-files/haproxy-marathon-bridge install_haproxy_system #{masterHostName}:8080
+
+        # Disable master mode
+        echo manual | sudo tee /etc/init/mesos-master.override
+
+        # Set ip of the slave
+        echo "#{slaveAddress}" | sudo tee /etc/mesos-slave/ip
+
+        # Set address of the master
+        echo "zk://#{masterAddress}/mesos" | sudo tee /etc/mesos/zk
+
+        # Add entry to host for master
+        echo -e "#{masterAddress} #{masterHostName}\n" >> /etc/hosts
+
+      SHELL
+
+    end
+  end
+end
+
+def validate_plugins
+  required_plugins = ['vagrant-hostmanager', 'vagrant-vbguest']
+  missing_plugins = []
+
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin?(plugin)
+      missing_plugins << "The '#{plugin}' plugin is required. Install it with 'vagrant plugin install #{plugin}'"
+    end
+  end
+
+  unless missing_plugins.empty?
+    missing_plugins.each { |x| puts x }
+    return false
+  end
+
+  true
+end
