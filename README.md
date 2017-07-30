@@ -14,7 +14,8 @@ Sur Ubuntu:
     $ vagrant plugin install vagrant-vbguest
     
     $ vagrant up
-    $ vagrant ssh
+    $ vagrant ssh master
+    $ vagrant ssh slave
     
 Pour vérifier si le réseau fonctionne: 
 

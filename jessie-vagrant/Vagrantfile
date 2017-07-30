@@ -115,7 +115,7 @@ Vagrant.configure("2") do |config|
       # Enable haproxy / marathon bridge for load balancing
       /vagrant/common-files/haproxy-marathon-bridge install_haproxy_system localhost:8080
 
-      # Add entry to host for slave
+      # Add entry to /etc/hosts for slave
       echo -e "#{slaveAddress} #{slaveHostName}\n" >> /etc/hosts
 
     SHELL
@@ -195,7 +195,7 @@ Vagrant.configure("2") do |config|
         chsh -s /bin/zsh
 
         # Install Mesos and frameworks
-        apt-get install -y mesos haproxy
+        apt-get install -y mesos haproxy haproxy-doc
 
         # Install Docker
         curl -fsSL get.docker.com | sh
@@ -221,13 +221,10 @@ Vagrant.configure("2") do |config|
         # Disable master mode
         echo manual | sudo tee /etc/init/mesos-master.override
 
-        # Set ip of the slave
-        echo "#{slaveAddress}" | sudo tee /etc/mesos-slave/ip
-
         # Set address of the master
-        echo "zk://#{masterAddress}/mesos" | sudo tee /etc/mesos/zk
+        echo "zk://#{masterHostName}:2181/mesos" | sudo tee /etc/mesos/zk
 
-        # Add entry to host for master
+        # Add entry to /etc/hosts for master
         echo -e "#{masterAddress} #{masterHostName}\n" >> /etc/hosts
 
       SHELL

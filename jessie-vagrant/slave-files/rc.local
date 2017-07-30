@@ -4,5 +4,6 @@
 # TODO: find a better way, System V ?
 
 service mesos-slave start
+service haproxy start
 
 exit 0
