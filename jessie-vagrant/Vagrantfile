@@ -139,6 +139,9 @@ Vagrant.configure("2") do |config|
       # Add entry to /etc/hosts for slave
       echo -e "#{slaveAddress} #{slaveHostName}\n" >> /etc/hosts
 
+      # First startup
+      /etc/rc.local
+
     SHELL
   end
 
@@ -259,6 +262,9 @@ Vagrant.configure("2") do |config|
 
         # Add entry to /etc/hosts for master
         echo -e "#{masterAddress} #{masterHostName}\n" >> /etc/hosts
+
+        # First startup
+        /etc/rc.local
 
       SHELL
 
