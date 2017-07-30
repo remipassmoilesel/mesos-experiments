@@ -113,7 +113,7 @@ Vagrant.configure("2") do |config|
     dpkg-reconfigure -f noninteractive locales
 
     # Add various helpers
-    apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed
+    apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed htop
 
     # change root password
     echo root:azerty | chpasswd
@@ -145,6 +145,9 @@ Vagrant.configure("2") do |config|
     # Add startup script
     cp /vagrant/rc.local /etc/rc.local
     chmod +x /etc/rc.local
+
+    # Enable haproxy / marathon bridge for load balancing
+    /vagrant/haproxy-marathon-bridge install_haproxy_system localhost:8080
 
   SHELL
 end
