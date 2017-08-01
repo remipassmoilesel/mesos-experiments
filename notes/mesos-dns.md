@@ -95,7 +95,6 @@ Ajouter le résolveur DNS aux esclaves:
     
     nameserver 10.0.2.25    # adresse de mesos-dns
 
-
 Utiliser systemd pour gérer le service:
 
     $ vim /lib/systemd/system/mesos-dns.service
@@ -123,3 +122,8 @@ Pings:
 
     $ ping leader.mesosv
     $ ping task.marathon.mesosv
+    
+Problème (WIP):
+
+    Si l'application écoute sur 8000 dans le docker, qu'elle a un port aléatoire externe, utiliser le nom de domaine 
+    requiert de connaitre le port
