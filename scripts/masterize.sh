@@ -87,9 +87,9 @@ echo "Mesos1-Jessie-Cluster" | sudo tee /etc/mesos-master/cluster
 # echo "8mins" | sudo tee /etc/mesos-slave/executor_registration_timeout
 
 # Add entry to /etc/hosts for slave
-echo -e "${SLAVE1_ADDRESS} #{SLAVE1_HOSTNAME}\n" >> /etc/hosts
-echo -e "${SLAVE2_ADDRESS} #{SLAVE2_HOSTNAME}\n" >> /etc/hosts
-echo -e "${SLAVE3_ADDRESS} #{SLAVE3_HOSTNAME}\n" >> /etc/hosts
+echo -e "${SLAVE1_ADDRESS} ${SLAVE1_HOSTNAME}\n" >> /etc/hosts
+echo -e "${SLAVE2_ADDRESS} ${SLAVE2_HOSTNAME}\n" >> /etc/hosts
+echo -e "${SLAVE3_ADDRESS} ${SLAVE3_HOSTNAME}\n" >> /etc/hosts
 
 chown -R zookeeper:zookeeper /var/lib/zookeeper
 chown -R zookeeper:zookeeper /etc/zookeeper
