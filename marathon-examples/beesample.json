@@ -1,0 +1,41 @@
+{
+  "id": "/bee-sample",
+  "cpus": 1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 1,
+  "acceptedResourceRoles": [],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "10.0.3.221:5000/bee-sample-mesos:1.0.0",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 0,
+          "hostPort": 0,
+          "servicePort": 80,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [
+        {
+          "key": "net",
+          "value": "host"
+        }
+      ],
+      "forcePullImage": false
+    }
+  },
+  "portDefinitions": [
+    {
+      "port": 80,
+      "protocol": "tcp",
+      "name": "default",
+      "labels": {}
+    }
+  ]
+}

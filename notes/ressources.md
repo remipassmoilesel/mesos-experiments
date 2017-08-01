@@ -20,6 +20,10 @@ http://mesos.apache.org/documentation/latest.
 
 Installation: http://www.bogotobogo.com/DevOps/DevOps_Mesos_Install.php
 
+## Code
+
+Défintion d'appliaction: https://github.com/mesosphere/marathon/blob/master/docs/docs/rest-api/public/api/v2/schema/AppDefinition.json
+
 ## Dépôts
 
 https://github.com/Woorank/vagrant-mesos-cluster

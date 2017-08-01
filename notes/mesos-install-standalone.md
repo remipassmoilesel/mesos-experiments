@@ -4,6 +4,9 @@ Cette note explique l'installation de Mesos master et slave sur une même machin
 
 Voir aussi le Vagrantfile de jessie-vagrant/
 
+Au moment de l'écriture de cette note, les paquets sur le dépôt mesosphere ne sont disponible que pour Debian Jessie 
+(pour ce qui est de Debian, voir Ubuntu et autres) 
+
 ## Installation de Mesos Master, Marathon et Chronos
 
 Ajouter des dépôts et mettre à jour: 

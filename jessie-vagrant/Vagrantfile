@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
       # Activate debug
       set -x
 
-      echo "Setting up master with adress:             #{masterAddress}"
+      echo "Setting up master with address:             #{masterAddress}"
       echo "Setting up master with host name:          #{masterHostName}"
 
       export DEBIANFRONTEND=noninteractive
@@ -65,7 +65,7 @@ Vagrant.configure("2") do |config|
       export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
       export CODENAME=$(lsb_release -cs)
 
-      echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+      echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
       echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
 
       # Update all
@@ -122,7 +122,7 @@ Vagrant.configure("2") do |config|
       /vagrant/common-files/haproxy-marathon-bridge install_haproxy_system localhost:8080
 
       # Set ip of the slave. Slave or master should choice a bad interface like loopback
-      # and only have routable adresses to avoid issues
+      # and only have routable addresses to avoid issues
       echo "#{masterAddress}" | sudo tee /etc/mesos-master/ip
       echo "#{masterAddress}" | sudo tee /etc/mesos-slave/ip
 
@@ -183,9 +183,9 @@ Vagrant.configure("2") do |config|
         # Activate debug
         set -x
 
-        echo "Setting up slave with adress:             #{slaveAddress}"
+        echo "Setting up slave with address:             #{slaveAddress}"
         echo "Setting up slave with host name:          #{slaveHostName}"
-        echo "Setting up slave with master addess:      #{masterAddress}"
+        echo "Setting up slave with master address:      #{masterAddress}"
 
         export DEBIANFRONTEND=noninteractive
 
@@ -194,7 +194,7 @@ Vagrant.configure("2") do |config|
         export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
         export CODENAME=$(lsb_release -cs)
 
-        echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+        echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
         echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
         apt-get update -y
         apt-get upgrade -y
@@ -250,7 +250,7 @@ Vagrant.configure("2") do |config|
         echo manual | sudo tee /etc/init/mesos-master.override
 
         # Set ip of the slave. Slave or master should choice a bad interface like loopback
-        # and only have routable adresses to avoid issues
+        # and only have routable addresses to avoid issues
         echo "#{slaveAddress}" | sudo tee /etc/mesos-slave/ip
 
         # Register zookeeper master url for slave
