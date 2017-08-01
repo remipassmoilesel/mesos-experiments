@@ -1,0 +1,31 @@
+{
+  "id": "/mongodb",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 2,
+  "acceptedResourceRoles": [
+    "*"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "mongo:2.4",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 27017,
+          "hostPort": 0,
+          "servicePort": 27017,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
+    }
+  }
+}
