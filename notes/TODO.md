@@ -1,5 +1,6 @@
 # TODO
 
+- Scripts Ansible
 - Voir Marathon-DNS pour load balancing
 - Voir Apache Sparks
 - Créer 3 maitres et tester zookeeper
