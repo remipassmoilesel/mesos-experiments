@@ -65,7 +65,7 @@ Vagrant.configure("2") do |config|
       export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
       export CODENAME=$(lsb_release -cs)
 
-      echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+      echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
       echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
 
       # Update all
@@ -194,7 +194,7 @@ Vagrant.configure("2") do |config|
         export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
         export CODENAME=$(lsb_release -cs)
 
-        echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+        echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
         echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
         apt-get update -y
         apt-get upgrade -y
