@@ -82,6 +82,9 @@ echo "zk://${MASTER_ADDRESS}:2181/mesos" | sudo tee /etc/mesos/zk
 # Register a human readable name for cluster
 echo "Mesos1-Jessie-Cluster" | sudo tee /etc/mesos-master/cluster
 
+# disable slave mode
+echo "manual" | tee /etc/init/mesos-slave.override
+
 # Enable Mesos support for Docker
 # echo "docker,mesos" | sudo tee /etc/mesos-slave/containerizers
 # echo "8mins" | sudo tee /etc/mesos-slave/executor_registration_timeout
