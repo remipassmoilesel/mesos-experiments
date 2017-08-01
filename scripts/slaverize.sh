@@ -70,7 +70,7 @@ cp /root/mesos-experiments/scripts/slave-files/rc.local /etc/rc.local
 chmod +x /etc/rc.local
 
 # Enable haproxy / marathon bridge for load balancing
-/root/mesos-experiments/scripts/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOSTNAME:8080
+/root/mesos-experiments/scripts/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOST_NAME:8080
 
 # Disable master mode
 echo manual | sudo tee /etc/init/mesos-master.override
