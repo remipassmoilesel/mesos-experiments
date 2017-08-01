@@ -1,0 +1,27 @@
+{
+  "id": "bee-sample",
+  "cpus": 1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 1,
+  "type": "DOCKER",
+  "volumes": [],
+  "container": {
+    "docker": {
+      "image": "10.0.3.221:5000/bee-sample:1.0.0",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 8000,
+          "hostPort": 0,
+          "servicePort": 80,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [],
+      "forcePullImage": false
+    }
+  }
+}
