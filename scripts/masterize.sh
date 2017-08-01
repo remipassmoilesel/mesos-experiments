@@ -91,5 +91,8 @@ echo -e "${SLAVE1_ADDRESS} #{SLAVE1_HOSTNAME}\n" >> /etc/hosts
 echo -e "${SLAVE2_ADDRESS} #{SLAVE2_HOSTNAME}\n" >> /etc/hosts
 echo -e "${SLAVE3_ADDRESS} #{SLAVE3_HOSTNAME}\n" >> /etc/hosts
 
+chown -R zookeeper:zookeeper /var/lib/zookeeper
+chown -R zookeeper:zookeeper /etc/zookeeper
+
 # First startup
 /etc/rc.local

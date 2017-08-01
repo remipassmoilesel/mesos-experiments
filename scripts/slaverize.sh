@@ -72,22 +72,25 @@ chmod +x /etc/rc.local
 # Enable haproxy / marathon bridge for load balancing
 /root/mesos-experiments/scripts/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOST_NAME:8080
 
+# Add entry to /etc/hosts for master
+echo -e "${MASTER_ADDRESS} ${MASTER_HOST_NAME}\n" >> /etc/hosts
+
 # Disable master mode
-echo manual | sudo tee /etc/init/mesos-master.override
+echo manual | tee /etc/init/mesos-master.override
 
 # Set ip of the slave. Slave or master should choice a bad interface like loopback
 # and only have routable addresses to avoid issues
-echo "${SLAVE_ADDRESS}" | sudo tee /etc/mesos-slave/ip
+echo "${SLAVE_ADDRESS}" | tee /etc/mesos-slave/ip
 
 # Register zookeeper master url for slave
-echo "zk://${MASTER_ADDRESS}:2181/mesos" | sudo tee /etc/mesos/zk
+echo "zk://${MASTER_ADDRESS}:2181/mesos" | tee /etc/mesos/zk
 
 # Enable Mesos support for Docker
-echo "docker,mesos" | sudo tee /etc/mesos-slave/containerizers
-echo "8mins" | sudo tee /etc/mesos-slave/executor_registration_timeout
+echo "docker,mesos" | tee /etc/mesos-slave/containerizers
+echo "8mins" | tee /etc/mesos-slave/executor_registration_timeout
 
-# Add entry to /etc/hosts for master
-echo -e "${MASTER_ADDRESS} ${MASTER_HOST_NAME}\n" >> /etc/hosts
+chown -R zookeeper:zookeeper /var/lib/zookeeper
+chown -R zookeeper:zookeeper /etc/zookeeper
 
 # First startup
 /etc/rc.local
