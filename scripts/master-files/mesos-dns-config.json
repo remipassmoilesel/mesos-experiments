@@ -1,0 +1,22 @@
+{
+  "zk": "zk://10.0.2.25:2181/mesos",
+  "masters": ["10.0.2.25:5050"],
+  "refreshSeconds": 10,
+  "ttl": 60,
+  "domain": "mesosv",
+  "port": 53,
+  "resolvers": ["80.67.169.12", "80.67.169.40", "8.8.8.8", "8.8.4.4"],
+  "timeout": 5,
+  "httpon": true,
+  "dnson": true,
+  "httpport": 8123,
+  "externalon": true,
+  "listener": "10.0.2.25",
+  "SOAMname": "ns1.mesosv",
+  "SOARname": "root.ns1.mesosv",
+  "SOARefresh": 60,
+  "SOARetry":   600,
+  "SOAExpire":  86400,
+  "SOAMinttl": 60,
+  "IPSources": ["host", "netinfo", "mesos"]
+}

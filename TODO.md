@@ -1,6 +1,7 @@
 # TODO
 
-- Voir Marathon-DNS pour load balancing
+- arreter d'utiliser rc.local et utiliser systemd
+
 - Voir Apache Sparks
 - Créer 3 maitres et tester zookeeper
 - Utiliser HAPProxy pour load balancing et service discovery
