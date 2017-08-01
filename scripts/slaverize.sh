@@ -20,7 +20,7 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
 export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 export CODENAME=$(lsb_release -cs)
 
-echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
 echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
 apt-get update -y
 apt-get upgrade -y
@@ -29,20 +29,20 @@ apt-get upgrade -y
 apt-get install -y openjdk-8-jre -t jessie-backports
 
 # Fix locale for french (WIP)
-echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\nLC_TYPE="fr_FR.UTF-8"\n' > /etc/default/locale
-echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
-dpkg-reconfigure -f noninteractive locales
+#echo -e 'LANG="fr_FR.UTF-8"\nLANGUAGE="fr_FR:fr"\nLC_ALL="fr_FR"\nLC_TYPE="fr_FR.UTF-8"\n' > /etc/default/locale
+#echo "fr_FR.UTF-8 UTF-8" > /etc/locale.gen
+#dpkg-reconfigure -f noninteractive locales
 
 # Add various helpers
 apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed htop
 
 # Add oh my zsh for root
 cd /root && git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
-cp /vagrant/common-files/zshrc /root/.zshrc
+cp common-files/zshrc /root/.zshrc
 chsh -s /bin/zsh
 
 # change root password
-echo root:azerty | chpasswd
+# echo root:azerty | chpasswd
 
 ##
 ## INSTALL MESOS
@@ -55,7 +55,7 @@ apt-get install -y mesos haproxy haproxy-doc zookeeper zookeeperd
 curl -fsSL get.docker.com | sh
 
 # Add docker group to vagrant user
-usermod -aG docker vagrant
+usermod -aG docker debian
 
 # install python pip and update it
 apt-get install -y python-pip -t jessie-backports
@@ -66,11 +66,11 @@ pip install docker-compose
 pip install mesos.cli
 
 # Add startup script (TODO: use System V)
-cp /vagrant/slave-files/rc.local /etc/rc.local
+cp slave-files/rc.local /etc/rc.local
 chmod +x /etc/rc.local
 
 # Enable haproxy / marathon bridge for load balancing
-/vagrant/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOSTNAME:8080
+common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOSTNAME:8080
 
 # Disable master mode
 echo manual | sudo tee /etc/init/mesos-master.override

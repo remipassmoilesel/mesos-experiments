@@ -15,7 +15,7 @@ apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
 export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 export CODENAME=$(lsb_release -cs)
 
-echo "deb http://ftp.de.debian.org/debian jessie-backports main"    | tee /etc/apt/sources.list.d/backports.list
+echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
 echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
 
 # Update all
