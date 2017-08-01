@@ -38,7 +38,7 @@ apt-get install -y vim byobu curl wget openssh-server ranger zsh git sed htop
 
 # Add oh my zsh for root
 cd /root && git clone https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
-cp common-files/zshrc /root/.zshrc
+cp /root/mesos-experiments/scripts/common-files/zshrc /root/.zshrc
 chsh -s /bin/zsh
 
 # change root password
@@ -66,11 +66,11 @@ pip install docker-compose
 pip install mesos.cli
 
 # Add startup script (TODO: use System V)
-cp slave-files/rc.local /etc/rc.local
+cp /root/mesos-experiments/scripts/slave-files/rc.local /etc/rc.local
 chmod +x /etc/rc.local
 
 # Enable haproxy / marathon bridge for load balancing
-common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOSTNAME:8080
+/root/mesos-experiments/scripts/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOSTNAME:8080
 
 # Disable master mode
 echo manual | sudo tee /etc/init/mesos-master.override
