@@ -1,0 +1,36 @@
+{
+  "id": "/alpine-apache",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 2,
+  "acceptedResourceRoles": [
+    "*"
+  ],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [],
+    "docker": {
+      "image": "alpine-apache",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 82,
+          "servicePort": 82,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [
+        {
+          "key": "net",
+          "value": "host"
+        }
+      ],
+      "forcePullImage": false
+    }
+  }
+}

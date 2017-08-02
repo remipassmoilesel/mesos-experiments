@@ -1,4 +1,3 @@
-# Scripts d'installation
+# Installation scripts
 
-.. très simples dans le but d'avoir une première infrastructure d'essais
-rapidement.
+... very simple in order to setup a demo installation quickly.

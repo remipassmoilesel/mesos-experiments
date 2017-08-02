@@ -49,7 +49,7 @@ chsh -s /bin/zsh
 ##
 
 # Install Mesos and frameworks
-apt-get install -y mesos haproxy haproxy-doc zookeeper zookeeperd
+apt-get install -y mesos zookeeper zookeeperd
 
 # Install Docker
 curl -fsSL get.docker.com | sh
@@ -68,9 +68,6 @@ pip install mesos.cli
 # Add startup script (TODO: use System V)
 cp /root/mesos-experiments/scripts/slave-files/rc.local /etc/rc.local
 chmod +x /etc/rc.local
-
-# Enable haproxy / marathon bridge for load balancing
-/root/mesos-experiments/scripts/common-files/haproxy-marathon-bridge install_haproxy_system $MASTER_HOST_NAME:8080
 
 # Add entry to /etc/hosts for master
 echo -e "${MASTER_ADDRESS} ${MASTER_HOST_NAME}\n" >> /etc/hosts

@@ -16,7 +16,9 @@
 
 ## Possibilités intérressantes
 
-### Aurora,
+### Aurora
+
+Framework comparable à Marathon, pour lancer des tâches longues.
 
 ### Statefull
 

@@ -1,8 +1,25 @@
 # Installer et ajouter un esclave Mesos
 
-Installer Mesos, Zookeeper, et HAProxy 
+Installer Mesos et Zookeeper: 
 
-    $ apt-get install -y mesos zookeeper zookeeperd haproxy haproxy-doc
+    // add mesosphere repository and install java from backports
+    
+    # Add the mesosphere repository and update index
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
+    export DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
+    export CODENAME=$(lsb_release -cs)
+    
+    echo "deb http://ftp.de.debian.org/debian jessie-backports main contrib non-free"    | tee /etc/apt/sources.list.d/backports.list
+    echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main"   | tee /etc/apt/sources.list.d/mesosphere.list
+    apt-get update -y
+    apt-get upgrade -y
+    
+    # Install java 8
+    apt-get install -y openjdk-8-jre -t jessie-backports
+
+    // install mesos and zookeeper
+    
+    $ apt-get install -y mesos zookeeper zookeeperd 
 
 Installer Docker:
         
@@ -36,7 +53,6 @@ Enregistrer l'adresse zookeeper du maitre:
     $ echo "zk://#{masterAddress}:2181/mesos" | sudo tee /etc/mesos/zk
 
 Activer Docker:
-
 
     $ echo "docker,mesos" | sudo tee /etc/mesos-slave/containerizers
     $ echo "8mins" | sudo tee /etc/mesos-slave/executor_registration_timeout

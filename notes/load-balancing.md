@@ -33,3 +33,9 @@ https://dcos.io/docs/1.9/networking/marathon-lb/
 Mesos DNS est la solution conseillée du moment. Elle permet d'effectuer le même travail sans HAProxy.
 
 https://github.com/mesosphere/mesos-dns/releases
+
+Le problème est ensuite sur la gestion des ports. De plus, de nombreux 
+
+## TODO
+
+Finaliser une installation de marathon-lb.

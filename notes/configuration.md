@@ -19,7 +19,7 @@ Spécifier les serveurs:
    
 Premier port utilisé pour se connecter au leader, deuxième pour l'élection du leader.
 
-## Configurer Mesos 
+## Mesos 
 
 Mesos peut être configurer par variables d'environnement, par argument ou par fichier.
 
@@ -47,7 +47,7 @@ Pour calculer le quorum (la valeur de la majorité nécessaire pour élire un ma
     Quorum: N 
     Nombre de fautes tolérés: N – 1
     
-## Configurer HAProxy
+## HAProxy
 
     $ vim /etc/haproxy/haproxy.cfg
     

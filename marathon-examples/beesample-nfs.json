@@ -1,0 +1,46 @@
+{
+  "id": "/bee-sample",
+  "cmd": null,
+  "cpus": 1,
+  "mem": 128,
+  "disk": 0,
+  "instances": 3,
+  "acceptedResourceRoles": [],
+  "container": {
+    "type": "DOCKER",
+    "volumes": [{
+      "containerPath": "/home/bee/data/images",
+      "hostPath": "/data/bee-sample-nfs/images",
+      "mode": "RW"
+    }],
+    "docker": {
+      "image": "10.0.3.221:5000/bee-sample-mesos:1.0.0",
+      "network": "BRIDGE",
+      "portMappings": [
+        {
+          "containerPort": 0,
+          "hostPort": 0,
+          "servicePort": 80,
+          "protocol": "tcp",
+          "labels": {}
+        }
+      ],
+      "privileged": false,
+      "parameters": [
+        {
+          "key": "net",
+          "value": "host"
+        }
+      ],
+      "forcePullImage": false
+    }
+  },
+  "portDefinitions": [
+    {
+      "port": 80,
+      "protocol": "tcp",
+      "name": "default",
+      "labels": {}
+    }
+  ]
+}
