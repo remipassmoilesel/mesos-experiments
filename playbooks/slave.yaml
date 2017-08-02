@@ -1,0 +1,132 @@
+---
+- hosts: mesos-slave
+
+  vars:
+      slaveIp: 192.168.0.40
+
+  tasks:
+      - name: "Add Mesos repository"
+        apt-key:
+            keyserver: hkp://keyserver.ubuntu.com:80
+            id: E56151BF
+
+        apt_repository:
+            repo: "{{ item }}"
+            state: present
+        with_items:
+            - deb http://ftp.de.debian.org/debian jessie-backports main
+            - deb http://repos.mesosphere.com/debian jessie main
+
+        apt:
+            update_cache: "yes"
+            upgrade: "yes"
+            name: openjdk-8-jre
+            default_release: jessie-backports
+
+      - name: "Install various command line tools"
+        apt: name={{item}} state=installed
+        with_items:
+            - vim
+            - byobu
+            - curl
+            - wget
+            - rsync
+            - ranger
+            - zsh
+            - git
+            - sed
+            - htop
+
+        git:
+            repo: https://github.com/robbyrussell/oh-my-zsh .oh-my-zsh
+            dest: /root/.zshrc
+
+        raw: chsh -s /bin/zsh
+
+      - name: "Change root password"
+        raw: echo root:azerty | chpasswd
+
+
+      - name: "Install mesos"
+        apt: name={{item}} state=installed
+        with_items:
+            - mesos
+            - marathon
+            - chronos
+            - zookeeper
+            - zookeeperd
+
+      - name: "Install docker"
+        raw: curl -fsSL get.docker.com | sh
+
+      - name: "Add user to docker group"
+        raw: usermod -aG docker vagrant
+
+      - name: "Install python pip, docker compose, functionnal mesos cli"
+        apt:
+            name: python-pip
+            default_release: jessie-backports
+
+        pip:
+            name: "{{ item }}"
+            state: latest
+        with_items:
+            - docker-compose
+            - mesos.cli
+
+      - name: "Specify slave address"
+        copy:
+            content: "{{ slaveAddress }}"
+            dest: /etc/mesos-slave/ip
+
+      - name: "Specify master zookeeper adresses"
+        copy:
+            content: "zk://{{ masterAddress }}:2181/mesos"
+            dest: /etc/mesos/zk
+
+      - name: "Specify master host name and adresses"
+        copy:
+            content: "{{ masterAddess }} {{ masterHostName }}\n"
+            dest: /etc/hosts
+
+      - name: "Disable master mode"
+        copy:
+            content: "manual"
+            dest: /etc/init/mesos-master.override
+
+      - name: "Enable Docker on Mesos"
+        copy:
+            content: "docker,mesos"
+            dest: /etc/mesos-slave/containerizers
+
+      - name: "Allow docker to pull image"
+        copy:
+            content: "8mins"
+            dest: /etc/mesos-slave/executor_registration_timeout
+
+
+      - name: "Fix zookeeper configuration and files"
+        file:
+            path: /var/lib/zookeeper
+            owner: zookeeper
+            group: zookeeper
+            recurse: "yes"
+
+      - name: "Fix zookeeper configuration and files"
+        file:
+            path: /etc/zookeeper
+            owner: zookeeper
+            group: zookeeper
+            recurse: "yes"
+
+      - name: "Enable master mode"
+        systemd:
+            name: mesos-slave
+            enabled: "yes"
+            state: started
+
+      - name: "Disable master mode"
+        systemd:
+            name: mesos-master
+            enabled: "no"
+            state: stopped

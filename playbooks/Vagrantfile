@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Create a plain Jessie in order to make it slave
+
+# Slave address and host name
+slaveAddress        = "192.168.0.42"
+slaveHostName       = "slave2-jessie.mesos"
+
+Vagrant.configure("2") do |config|
+
+  # check if all plugins are present
+  validate_plugins || exit(1)
+
+  config.vm.define "slave" do |slave|
+
+    # box template
+    slave.vm.box = "debian/jessie64"
+
+    # check version of guest additions, disable if there are issues
+    slave.vbguest.auto_update = true
+
+    # Set ressources
+    slave.vm.provider "virtualbox" do |v|
+      v.memory = 2048
+      v.cpus = 1
+    end
+
+    # Configure network
+    slave.hostmanager.enabled = true
+    slave.hostmanager.manage_host = true
+    slave.hostmanager.manage_guest = true
+    slave.hostmanager.ignore_private_ip = false
+    slave.hostmanager.include_offline = true
+
+    slave.vm.network "public_network", ip: slaveAddress
+    slave.vm.network "forwarded_port", guest: 22, host: 10023
+    slave.vm.network "forwarded_port", guest: 5050, host: 5060
+    slave.vm.network "forwarded_port", guest: 5051, host: 5061
+    slave.vm.hostname = slaveHostName
+
+  end
+end
+
+def validate_plugins
+  required_plugins = ['vagrant-hostmanager', 'vagrant-vbguest']
+  missing_plugins = []
+
+  required_plugins.each do |plugin|
+    unless Vagrant.has_plugin?(plugin)
+      missing_plugins << "The '#{plugin}' plugin is required. Install it with 'vagrant plugin install #{plugin}'"
+    end
+  end
+
+  unless missing_plugins.empty?
+    missing_plugins.each { |x| puts x }
+    return false
+  end
+
+  true
+end
