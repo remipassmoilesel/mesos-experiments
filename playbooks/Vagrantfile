@@ -4,7 +4,7 @@
 # Create a plain Jessie in order to make it slave
 
 # Slave address and host name
-slaveAddress        = "10.0.2.139"
+slaveAddress        = "10.0.2.39"
 slaveHostName       = "mesos1-slave4.mesos"
 
 Vagrant.configure("2") do |config|

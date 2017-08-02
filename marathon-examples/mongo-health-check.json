@@ -1,59 +1,48 @@
 {
-  "id": "/bee-sample",
+  "id": "/mongodb",
   "cmd": null,
   "cpus": 1,
   "mem": 128,
   "disk": 0,
-  "instances": 3,
+  "instances": 1,
   "acceptedResourceRoles": [
     "*"
   ],
   "container": {
     "type": "DOCKER",
-    "volumes": [
-      {
-        "containerPath": "/home/bee/data/images",
-        "hostPath": "/data/bee-sample-nfs/images",
-        "mode": "RW"
-      }
-    ],
+    "volumes": [],
     "docker": {
-      "image": "10.0.3.221:5000/bee-sample-mesos:1.0.0",
+      "image": "mongo:2.4",
       "network": "BRIDGE",
       "portMappings": [
         {
-          "containerPort": 0,
+          "containerPort": 27017,
           "hostPort": 0,
-          "servicePort": 80,
+          "servicePort": 27017,
           "protocol": "tcp",
           "labels": {}
         }
       ],
       "privileged": false,
-      "parameters": [
-        {
-          "key": "net",
-          "value": "host"
-        }
-      ],
+      "parameters": [],
       "forcePullImage": false
     }
   },
   "healthChecks": [
     {
-      "gracePeriodSeconds": 100,
-      "intervalSeconds": 10,
+      "gracePeriodSeconds": 300,
+      "intervalSeconds": 60,
       "timeoutSeconds": 20,
-      "maxConsecutiveFailures": 2,
+      "maxConsecutiveFailures": 3,
       "portIndex": 0,
-      "path": "/health",
+      "path": "http://localhost:28017",
       "protocol": "HTTP",
       "ignoreHttp1xx": false
     }
   ],
   "portDefinitions": [
     {
-      "port": 80,
+      "port": 27017,
       "protocol": "tcp",
       "name": "default",
       "labels": {}

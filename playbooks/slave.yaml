@@ -1,8 +1,10 @@
+# Playbook pour installation d'un esclave Mesos à partir d'une Debian Jessie
 - hosts: slaves
   vars:
-    masterAddress: "10.0.2.25"
+    masterAddress: "10.0.6.10"
     masterHostName: "mesos1-master1.mesos"
-    slaveAddress: "10.0.2.139"
+    slaveAddress: "10.0.6.10"
+    slaveHostName: "mesos1-slave1.mesos"
 
   tasks:
   - name: "Add Mesos repository key"
@@ -45,7 +47,7 @@
   - name: "Clone oh my zsh"
     git:
       repo: https://github.com/robbyrussell/oh-my-zsh
-      dest: /root/.zshrc
+      dest: /root/.oh-my-zsh
 
   - name: "Add zsh config"
     copy:
@@ -71,7 +73,10 @@
     raw: curl -fsSL get.docker.com | sh
 
   - name: "Add user to docker group"
-    raw: usermod -aG docker vagrant
+    raw: usermod -aG docker debian
+
+  - name: "Installer easy_install"
+    apt: name="python-setuptools" state=installed
 
   - name: "Install python pip"
     raw: "easy_install pip"
@@ -87,6 +92,11 @@
   - name: "Specify slave address"
     copy:
       content: "{{ slaveAddress }}"
+      dest: /etc/mesos-slave/ip
+
+  - name: "Specify slave hostname"
+    copy:
+      content: "{{ slaveHostName }}"
       dest: /etc/mesos-slave/ip
 
   - name: "Specify master zookeeper adresses"
